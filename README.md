@@ -23,10 +23,39 @@ IBM Telco Customer Churn dataset: 7,043 customers, 21 features including contrac
 
 **Best model**: Gradient Boosting — highest ROC-AUC and best precision/recall balance for the retention use case.
 
+## Interpretability
+
+Using SHAP values on the Gradient Boosting model, the top 5 drivers of churn
+(ranked by mean absolute SHAP value) are:
+
+1. **Two-year contract** (reduces churn) — customers on two-year contracts are
+   by far the least likely to leave. This is the strongest single driver.
+2. **Tenure** (reduces churn as it increases) — newer customers are
+   significantly more likely to leave; risk falls steadily with time as a
+   customer.
+3. **Fiber optic internet** (increases churn) — fiber customers show elevated
+   churn compared with DSL customers.
+4. **One-year contract** (reduces churn) — less protective than a two-year
+   contract, but still well below the month-to-month baseline.
+5. **Paperless billing** (increases churn) — a smaller but consistent push
+   toward churn.
+
+Contract type is the dominant theme: the two contract features together outweigh
+every other driver, and month-to-month customers (the baseline category for
+both) are the highest-risk group. Other features that show up just outside the
+top 5 include dependents, electronic check payment, and online security. These
+are associations learned by the model, not causal effects, and correlated
+features (contract, tenure, total charges) share credit.
+
+![Churn Risk Scorecard](reports/figures/churn_risk_scorecard.png)
+
+*Bar length shows the average size of each feature's influence on the model's
+predictions, not its direction. See the direction noted in each item above.*
+
 ## Project Structure
 ```
 data/         # Raw and processed datasets
-notebooks/    # 01_eda, 02_feature_engineering, 03_modeling
+notebooks/    # 01_eda, 02_feature_engineering, 03_modeling, 04_shap_explainability
 src/          # preprocessing.py, evaluation.py
 models/       # Saved best model
 reports/      # Figures and outputs
